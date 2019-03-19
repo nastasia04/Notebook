@@ -4,32 +4,33 @@ public class Main {
 
     public static void main(String[] args) {
         Notebook newNotebook = new Notebook();
-        newNotebook.showall();
+        newNotebook.showAll();
 
         System.out.println("Add 10 notes");
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++) {
             newNotebook.addNote("title_" + i, "note_" + i);
+        }
 
-        newNotebook.showall();
+        newNotebook.showAll();
 
-        String edit_title = "title_2";
-        newNotebook.editNote(edit_title, "edited_note");
-        newNotebook.showall();
+        String editTitle = "title_2";
+        newNotebook.editNote(editTitle, "edited_note");
+        newNotebook.showAll();
 
         System.out.println("Delete 5 notes by title");
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 5; i++) {
             newNotebook.dropNote("title_" + i);
+        }
 
-        newNotebook.remove_Null_elements();
-        newNotebook.showall();
+        newNotebook.showAll();
 
-        edit_title = "title98";
-        newNotebook.dropNote(edit_title);
-        newNotebook.editNote(edit_title, "something");
-        newNotebook.addNote(edit_title, "something");
-        newNotebook.showall();
+        editTitle = "title98";
+        newNotebook.dropNote(editTitle);
+        newNotebook.editNote(editTitle, "something");
+        newNotebook.addNote(editTitle, "something");
+        newNotebook.showAll();
 
         newNotebook.deleteAll();
-        newNotebook.showall();
+        newNotebook.showAll();
     }
 }
