@@ -2,16 +2,16 @@ package notebook;
 import java.text.*;
 
 public class Notebook {
-    private static Note[] notebook;
+    private  Note[] notebook;
     private static final int DEFAULT_INITIAL_SIZE = 5;
-    private static int countOfNotes = 0;
+    private  int countOfNotes = 0;
 
     public Notebook() {
         System.out.println("Create notebook with default initial size");
         notebook = new Note[ DEFAULT_INITIAL_SIZE];
     }
 
-    public static void addNote(String title, String message) {
+    public void addNote(String title, String message) {
         // check the same titles
         boolean alreadyHasThisTitle;
         do {
@@ -45,19 +45,35 @@ public class Notebook {
     // delete note by title
     public void dropNote(String title) {
         boolean isExist = false;
+        int index = -1;
         System.out.println("Dropping note " + title);
         for (int i = 0; i <= countOfNotes; i++) {
             if (notebook[i] != null && title.equals(notebook[i].getNoteTitle())) {
                 deleteNoteNumber(i);
+                index = i;
                 System.out.println("Dropped note " + title);
                 isExist = true;
                 break;
             }
         }
+        // move elements to the previous positions; the last note will be null
+        for (int i = index; i <= countOfNotes; i++) {
+            if(index != -1 && i != countOfNotes){
+                notebook[i] = notebook[i+1];
+            }
+            if(isExist && i == countOfNotes) {
+                notebook[i] = null;
+            }
+        }
+        //decrease array size if it necessary
+        if (countOfNotes <= notebook.length / 2) {
+            Note[] notebookNew = new Note[notebook.length / 2 + 1];
+            System.arraycopy(notebook, 0, notebookNew, 0, countOfNotes);
+            notebook = notebookNew;
+        }
         if (!isExist){
             System.out.println("Error: This note doesn't exist.");
         }
-        removeNullElements();
     }
 
     public void deleteAll() {
@@ -118,25 +134,15 @@ public class Notebook {
         }
     }
 
-    private void removeNullElements() {
-        Note[] arrayWithoutNullsInTheMiddle = new Note[countOfNotes + 1];
-        int counter = 0;
-        for (int i = 0; i < notebook.length; i++) {
-            Note note = notebook[i];
-            if (note != null) {
-                arrayWithoutNullsInTheMiddle[counter] = note;
-                counter++;
-            }
-        }
-        notebook = arrayWithoutNullsInTheMiddle;
-    }
-
     //edit note by number in notebook
     private void editNoteNumber(int noteNumber, String title, String newNote) {
         // check of this note
         if (noteNumber > countOfNotes) {
             addNote(title, newNote);
             System.out.println("Unable to find note. Created new note.");
+        }
+        else if (noteNumber < 0) {
+            System.out.println("Error: Note index is negative. Unable to edit.");
         }
         else {
             notebook[noteNumber].editNote(newNote);
